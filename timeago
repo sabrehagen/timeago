@@ -1,0 +1,26 @@
+#!/bin/sh
+
+read timestamp
+
+minutes=60
+hours=$(( 60 * minutes ))
+days=$(( 24 * hours ))
+diff=$(( ${2:-$(date +%s)} - $timestamp ))
+
+if [ $diff -lt 60 ]; then
+  timeago="$diff seconds"
+elif [ $diff -lt 120 ]; then
+  timeago="1 minute"
+elif [ $diff -lt $(( 1 * $hours )) ]; then
+  timeago="$(( ($diff + $minutes / 2) / $minutes )) minutes"
+elif [ $diff -lt $(( 1 * $hours + 30 * $minutes )) ]; then
+  timeago="1 hour"
+elif [ $diff -lt $(( 1 * $days )) ]; then
+  timeago="$(( ($diff + $hours / 2) / $hours )) hours"
+elif [ $diff -lt $(( 2 * $days )) ]; then
+  timeago="1 day"
+else
+  timeago="$(( ($diff + $days / 2) / $days)) days"
+fi
+
+echo "$timeago ago"
